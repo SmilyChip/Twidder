@@ -1,0 +1,527 @@
+body {
+    background-color: #00acee;
+}
+
+#welcome_view {
+    width: 600px; 
+    height: 400px;
+    display: none;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    right: 0%;
+    left: 0%;
+}
+
+#image {
+    width: 336px; 
+    height: 396px; 
+    border: 2px solid black; 
+    float: left;
+    margin-right: 5px;
+}
+
+#login {
+    height: 71px;
+    width: 246px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    margin-top: auto;
+    margin-right: auto;
+    padding-top: 15px;
+    float:right; 
+    border: 2px solid black;
+    background-color: #f0f0f0;  
+}
+
+#form_login {
+   width:98%;
+}
+
+#form_login label{
+    width: 42%;
+    height: 100%;
+    float: left;
+    margin-top: 1%;
+}
+
+#form_login input{
+    width: 55%;
+    height: auto;
+    vertical-align: middle;
+    float: right;
+}
+
+#form_login button{
+    margin-top: 2%; /*This is kind of forced*/
+    /*margin-left: ;*/
+    margin-bottom: 2%;
+    width: 26%;
+}
+
+/* Designe for the pop up alert if the password is shorter than 12 characters*/
+#login_message {
+    color: black; 
+    width: 150px;
+    display: none; 
+    height: auto;
+    position: absolute;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    top: 135px;
+    left: 50%;
+    transform: translateX(310px); /*makes sure to stay at this distance from the center of the page in x axis*/
+    border: 2px solid black;
+    background-color: #f0f0f0; 
+}
+
+#forgotPassword{
+    float: left;
+    color: blue; 
+    cursor: pointer;
+    width: 70%;
+    height: 13px;
+    padding-top: 2%;
+    padding-left: 2%;
+}
+
+#forgot_password_message{
+    color: black; 
+    width: 150px;
+    display: none; 
+    height: auto;
+    position: absolute;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    top: 135px;
+    left: 50%;
+    transform: translateX(310px); /*makes sure to stay at this distance from the center of the page in x axis*/
+    border: 2px solid black;
+    background-color: #f0f0f0; 
+}
+
+#forgot_password_container{
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#forgot_password_container h2{
+    text-align: center;
+}
+
+#forgot_password_container h3{
+    text-align: center;
+}
+
+#recovery_form {
+    width:98%;
+    text-align: center;
+}
+
+#recovery_form label{
+    width: auto;
+}
+
+#recovery_form input{
+    width: 60%;
+    padding-left: 1%;
+}
+
+#button_forgot{
+    margin-top: 6%;
+    margin-left: 26%;
+    margin-bottom: 2%;
+    width: 30%;
+}
+
+#button_cancel{
+    margin-top: 6%;
+    margin-bottom: 2%;
+    margin-left: 2%;
+    width: 20%;
+}
+
+
+#signup {
+    width: 246px;
+    height: 296px;
+    margin-left: 5px;
+    margin-top: 5px;
+    float:right; 
+    border: 2px solid black;
+    background-color: #f0f0f0;
+}
+
+#form_signup  {
+    width:98%;
+}
+ 
+#signup_str {
+    text-align: center;
+}
+
+#form_signup label{
+    width: 42%;
+    float: left;
+    margin-top: 1%;
+    /* I had some trouble 
+    with the line next to 
+    the select tag (city)
+    because it was beeing showed in 
+    the input side, so this
+    code clears that*/
+    clear: left; 
+}
+
+#form_signup select{
+    width: 58%;
+    height: auto;
+    float: right;
+}
+
+#form_signup input{
+     width: 55%;
+     height: auto;
+     float: right;
+}
+ 
+#form_signup button {
+    margin-top: 6%;
+    margin-left: 70%;
+    width: 26%;
+}
+
+ /* Designe for the pop up alert if the passwords are shorter than 12 characters or if they are different*/
+#signup_message {
+    color: black; 
+    width: 150px;
+    height: 42px;
+    display: none;
+    position: absolute;
+    padding-left: 3px;
+    left: 50%;
+    top: 390px;
+    transform: translateX(310px); /*makes sure to stay at this distance from the center of the page in x axis*/
+    border: 2px solid black;
+    background-color: #f0f0f0; 
+}
+
+#profile_view {
+    width: 1000px; 
+    height: auto;
+    display: none;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#home_content {
+    width: auto;
+    height: auto;
+}
+
+.tab {
+    overflow: hidden;
+    width: auto;
+    border: 3px solid #ccc;
+    background-color: #f1f1f1;
+    text-align: center;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    width: auto;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 13%;
+    padding-right: 13%;
+    transition: 0.3s;
+    font-size: 17px;  
+}
+
+.tab button.selected_tab {
+    background-color: #ccc;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+   
+/* Style the tab content */
+.tab_content {
+    width: 100%;
+    display: none;
+    padding: 6px 12px;
+    border: 3px solid #ccc;
+    background-color: #f0f0f0;
+    border-top: none;
+}
+
+#welcome_str {
+    text-align: center;
+}
+
+#user_info {
+    width: 45%;
+    float: left;
+    height: 270px;
+    padding: 2%;
+    border: solid #ccc;
+} 
+
+#post_message_own_wall {
+    width: 45%;
+    height: 270px;
+    float: right;
+    padding: 2%;
+    border: solid #ccc;
+}
+
+#personal_info_string {
+    padding-left: 3%;
+    padding-top: 1%;
+} 
+
+#user_info_message {
+    color: black; 
+    width: 150px;
+    display: none; 
+    height: auto;
+    position: absolute;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    top: 220px;
+    left: 50%;
+    transform: translateX(510px); /*makes sure to stay at this distance from the center of the page in x axis*/
+    border: 2px solid black;
+    background-color: #f0f0f0; 
+}
+
+#change_string{
+    width: 40%;
+    padding-left: 3%;
+    margin-top: 0%;
+}
+
+#change_password_content {
+    width: 50%;
+    float: left;
+    height: auto;
+    display: block;
+    padding: 2%;
+    margin-top: 2%;
+    margin-left: 1%;
+    border: solid #ccc;
+}
+#form_change_password  {
+    width: 80%;    
+}
+
+#form_change_password label{
+    width: 45%;
+    float: left;
+    margin-top: 0%;
+    padding-top: 0.5%;
+    padding-bottom: 0.3%;
+    clear: left; 
+}
+
+#form_change_password input{
+     width: 45%;
+     height: auto;
+     margin-right: 7%;
+     margin-bottom: 0.5%;
+     float: right;
+     padding-top: 0%;
+}
+ 
+#form_change_password button {
+    margin-top: 6%;
+    margin-left: 70%;
+    width: 40%;
+}
+
+#signout_string {
+    width: 40%;
+    padding-left: 10%;
+    margin-top: 3%;
+}
+
+#sign_out {
+    margin-top: 2%;
+    width: 41%;
+    margin-right: 1%;
+    padding-top: 1%;
+    border: solid #ccc;
+    float: right;
+}
+
+#signout_label {
+    padding-left: 3%;
+    margin-top: 1%;
+    margin-left: 3%;
+    width: 50%;
+    float: left;
+}
+
+
+#signout_button {
+    margin-top: 1%;
+    margin-left: 0%;
+    margin-right: 18%;
+    margin-bottom: 4%;
+    width: 20%;
+    float: right;
+}
+
+
+#space {
+    margin-top: 230px;
+}
+ 
+/* Designe for the pop up alert if the password is shorter than 12 characters*/
+#passchange_message {
+    color: black; 
+    width: 150px;
+    display: none; 
+    height: auto;
+    position: absolute;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    top: 135px;
+    left: 50%;
+    transform: translateX(510px); /*makes sure to stay at this distance from the center of the page in x axis*/
+    border: 2px solid black;
+    background-color: #f0f0f0; 
+}
+
+#log_out_message {
+    color: black; 
+    width: 150px;
+    display: none; 
+    height: auto;
+    position: absolute;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    top: 135px;
+    left: 50%;
+    transform: translateX(510px); /*makes sure to stay at this distance from the center of the page in x axis*/
+    border: 2px solid black;
+    background-color: #f0f0f0; 
+}
+
+#post_home_message {
+    color: black; 
+    width: 150px;
+    display: none; 
+    height: auto;
+    position: absolute;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    top: 135px;
+    left: 50%;
+    transform: translateX(510px); /*makes sure to stay at this distance from the center of the page in x axis*/
+    border: 2px solid black;
+    background-color: #f0f0f0; 
+}
+
+#post_browse_message {
+    color: black; 
+    width: 150px;
+    display: none; 
+    height: auto;
+    position: absolute;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    top: 135px;
+    left: 50%;
+    transform: translateX(510px); /*makes sure to stay at this distance from the center of the page in x axis*/
+    border: 2px solid black;
+    background-color: #f0f0f0; 
+}
+
+#message_wall {
+    width: 91.5%;
+    height: auto;
+    display: block;
+    margin-top: 350px;
+    margin-bottom: 2%;
+    padding: 1% 4%;
+    border: solid #ccc;
+}
+
+#browse_message {
+    color: black; 
+    width: 150px;
+    display: none; 
+    height: auto;
+    position: absolute;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    top: 135px;
+    left: 50%;
+    transform: translateX(510px); /*makes sure to stay at this distance from the center of the page in x axis*/
+    border: 2px solid black;
+    background-color: #f0f0f0; 
+}
+
+.reload_button {
+    margin-top: 2%; 
+    margin-left: 85%;
+    width: 12%;
+}
+
+#browse_content {
+    width: auto;
+    height: auto;
+}
+
+#browse_container {
+    width: 91.5%;
+    height: auto;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    padding: 1% 4%;
+    border: solid #ccc;
+}
+
+#browse_user_info {
+    width: 45%;
+    float: left;
+    height: 270px;
+    display: none;
+    padding: 2%;
+    border: solid #ccc;
+}
+#browse_user_post {
+    width: 45%;
+    height: 270px;
+    display: none;
+    float: right;
+    padding: 2%;
+    border: solid #ccc;
+}
+
+#browse_user_wall {
+    width: 91.5%;
+    height: auto;
+    display: none;
+    margin-top: 350px;
+    margin-bottom: 2%;
+    padding: 1% 4%;
+    border: solid #ccc;
+}
+
+#account_content {
+    width: auto;
+    height: auto;
+}

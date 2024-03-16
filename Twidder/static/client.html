@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="/static/client.css" type="text/css" rel="stylesheet">
+        <title>Twidder</title>
+        <script src="/static/client.js"></script>
+
+        <script type="text/view" id="welcome_page">
+            <div id ="image">
+                <img src="/static/wimage.png" width="336" height="396">
+            </div>           
+            <div id = "login" >
+                <form id="form_login" onsubmit="return verify_login(this)" action = "" method='POST' >
+                    <label for='username'>Email:</label><input type="email" id="username" name="username" required><br>
+                    <label for='password'>Password:</label><input type="password" id="password" required/><br>
+                    <a href="#" id="forgotPassword" onclick="display_forgotPassword_view()">Forgot Your Password?</a>
+                    <button type="submit" id="button_login">Log in</button>
+                </form>
+            </div>
+
+            <div id="login_message"></div>
+            <div id ="signup">
+                <h4 id="signup_str">Sign up Here!</h4>
+                <form id="form_signup" onsubmit="return verify_signup(this)" action = "" method='POST'>
+                    <label for="name">First Name:</label><input type="text" id="name" name="name" required/>
+                    <label for="surname">Family Name:</label><input type="text" id="surname" name="surname" required/>
+                    <label for="gender">Gender:</label>
+                    
+                    <select id="gender" required>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Rather not say">Rather not say</option>
+                    </select>
+
+                    <label for="city">City:</label><input type="text" id="city" name="city" required/>
+                    <label for="country">Country:</label><input type="text" id="country" name="country" required/>
+                    <label for="username">Email:</label><input type="email" id="email_signup" name="username" required/>
+                    <label for="password">Password:</label><input type="password" id="password_signup" name="password" required/>
+                    <br><label for="repeat_pass">Repeat PSW:</label><input type="password" id="repeat_pass" name="repeat_pass" required/><br/>
+                    <button type="submit" id="button_signup">Sign up</button>
+                </form>
+            </div>
+            <div id="signup_message"></div>
+        </script>
+
+        <script type="text/view" id="profile_page">
+            <div class="tab">
+                <button class="tablink selected_tab" id="home_tab" onclick="show_tab(event, 'home_content')">Home</button>
+                <button class="tablink" id="browse_tab" onclick="show_tab(event, 'browse_content')">Browse</button>
+                <button class="tablink" id="account_tab" onclick="show_tab(event, 'account_content')">Account</button>
+            </div>
+
+            <div id="home_content" class="tab_content">
+                <h2 id="welcome_str">Welcome to Home</h2>
+                <div id="user_info"></div>
+                <div id="user_info_message"></div>
+                
+                <div id="post_message_own_wall">
+                    <h3> Post a message!</h3>
+                    <textarea id="post_message" rows="4" cols="50" placeholder="Write a message..."></textarea>
+                    <button onclick="post_message()">Post</button>
+                    <div id="post_home_message"></div>
+                </div>
+
+                <div id="message_wall">
+                    <h3>Your message wall</h3>
+                    <div id="message_wall_ms"></div>
+                    <button class="reload_button" onclick="reload_wall()">Reload Wall</button>
+                </div>   
+            </div>
+            
+            <div id="browse_content" class="tab_content">
+                <div id="browse_container">
+                    <h2>Explore and Browse</h2>
+                    <p>Enter the e-mail address of the user you want to view:</p>
+                    <input type="text" id="browse_user_email" placeholder="User's Email">
+                    <button onclick="browse_user()">View User</button>
+                </div>
+
+                <div id="browse_user_info"></div>
+                <div id="browse_user_post"></div>
+                <div id="browse_user_wall"></div>
+                <div id="user_info_message"></div>  
+                <div id="post_browse_message"></div>
+                <div id="browse_message"></div>
+            </div>
+
+            <div id="account_content" class="tab_content">
+                <div id="change_password_content">
+                    <h3 id="change_string">Change Password</h3>
+                    <form id="form_change_password" onsubmit="return change_password(this)" action = "" method='POST'>
+                        <label for="old_password">Old Password:</label><input type="password" id="old_password" required>
+                        <label for="new_password">New Password:</label><input type="password" id="new_password" required>
+                        <label for="repeat_new_password">Repeat New Password:</label><input type="password" id="repeat_new_password" required>
+                        <button type="submit" id="button_changepass">Change Password</button>
+                    </form>
+                </div>
+                <div id="passchange_message"></div>
+                <div id="sign_out">    
+                    <h3 id="signout_string">Sign Out</h3>
+                    <p id="signout_label"> Press the button to sign out: </p>
+                    <button id="signout_button" onclick="sign_out()">Sign Out</button>
+                </div>    
+                <div id="space"></div>
+                <div id="logout_message"></div>
+            </div>
+        </script>
+            <script type="text/view" id="forgot_password_page">
+                <div id="forgot_password_container">
+                    <h2>Recover your account</h2>
+                    <h3>Please enter your email address, we will send a recovery email to you.</h3>
+                    <form id="recovery_form" onsubmit="return recover_account(this)" action='' method='POST'>
+                        <label for="email">Email:</label><input type="email" id="email" name="email" required><br>
+                        <button onclick="shutdown_forgot_password()" id='button_cancel'>Cancel</button>
+                        <button type="submit" id='button_forgot'>Recover account</button>
+                    </form>
+                </div>
+                <div id="forgot_password_message"></div>
+            </script>
+    </head>
+    <body>
+        <div id="welcome_view"></div>
+        <div id="profile_view"></div>
+        <div id="forgot_password_view"></div>
+    </body>
+</html>

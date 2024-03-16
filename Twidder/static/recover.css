@@ -1,0 +1,101 @@
+body {
+    background-color: #00acee;
+}
+
+#recover_block {
+    width: 35%; 
+    height: 40%;
+    display: block;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    right: 0%;
+    left: 0%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#recover_block h1 {
+    text-align: center;
+}
+
+#recover_block h3 {
+    text-align: center;
+}
+
+#recover_block form{
+    width: 90%;
+}
+
+#recover_block label {
+    width: 42%;
+    height: auto;
+    margin-top: 1%;
+    margin-left: 20%;
+}
+
+#password {
+    width: 40%;
+    height: auto;
+    vertical-align: middle;
+    margin-right: 8%;
+    margin-left: 18px;
+}    
+
+#repeat_password {
+    width: 40%;
+    margin-left: 8px;
+    height: auto;
+    vertical-align: middle;
+    margin-right: 8%;
+}    
+
+#recover_block button{
+    width: auto;
+    text-align: center;
+    margin-top: 5%;
+    margin-left: 65%;
+}
+
+#passchange_message {
+    display: none;
+}
+
+#showmessage {
+    color: black; 
+    width: 150px;
+    display: none; 
+    height: auto;
+    position: absolute;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    top: 135px;
+    left: 50%;
+    transform: translateX(310px); /*makes sure to stay at this distance from the center of the page in x axis*/
+    border: 2px solid black;
+    background-color: #f0f0f0; 
+}
+
+#pass_change_div{
+    width: 30%; 
+    height: 30%;
+    display: block;
+    text-align: center;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#pass_change_view h1 {
+    text-align: center;
+}
+
+#pass_change_view button {
+    text-align: center;
+}
