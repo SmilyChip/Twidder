@@ -18,7 +18,7 @@ function establish_websocket_connection() {
     }
 
     // Creates a new websocket instance if there is no conection established
-    socket = new WebSocket("ws://127.0.0.1:5000/start_session");
+    socket = new WebSocket("ws:https://twidder.onrender.com/start_session");
 
     socket.onopen = function(event) {
         console.log('Connection with server established.');
