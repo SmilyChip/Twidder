@@ -787,7 +787,7 @@ if __name__ == '__main__':
     #database_helper.create_tables()
     #if "RENDER_POSTGRESQL_CONNECTIONSTRING" in os.environ:
     print(os.environ.get('DATABASE_URL'))
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://twidder_db_user:vtPvNum8SWLWTdtaIEZ3HFZa6yHGmLnt@dpg-cnrop0i1hbls73e0l7l0-a.oregon-postgres.render.com/twidder_db'#os.environ.get('DATABASE_URL')
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://twidder_db_user:vtPvNum8SWLWTdtaIEZ3HFZa6yHGmLnt@dpg-cnrop0i1hbls73e0l7l0-a/twidder_db'#os.environ.get('DATABASE_URL')
     print(app.config['SQLALCHEMY_DATABASE_URI'])
     debug_flag = False
     db.init_app(app)
