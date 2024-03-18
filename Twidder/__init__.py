@@ -2,10 +2,10 @@ from flask import Flask, jsonify, request
 from email_validator import validate_email, EmailNotValidError
 from flask_sock import Sock
 from flask_mail import Mail, Message
-import threading
-from datetime import datetime, timedelta
-import time
+import os
 import json
+#import db
+from flask_sqlalchemy import SQLAlchemy
 import database_helper
 
 app = Flask(__name__, static_folder='static')
@@ -17,6 +17,7 @@ app.config['MAIL_USERNAME'] = 'twidder0.s9pport@gmail.com'
 app.config['MAIL_PASSWORD'] = 'btyd cehb flpz gowr' 
 sock = Sock(app)
 mail = Mail(app)
+db = SQLAlchemy()
 
 @app.route("/")
 def root():
@@ -92,6 +93,7 @@ def sign_in():
         else:
             return jsonify({'message': 'Wrong credentials (username/password).'}), 401
     except Exception as e:
+        print(e)
         return jsonify({'message': 'Internal server error.', 'error': str(e)}), 500
 
 
@@ -778,61 +780,22 @@ def start_session(ws):
                 sessions[username].append(ws)    
                 ws.send(json.dumps({'action': 'session_activated'}))
 
-
-# Maximum time to reconect a session (in seconds)
-MAX_RECONNECT_TIME = 60
-
-@sock.route('/connection_lost')
-def handle_connection_lost(ws):
-    # Get user session
-    client_id = ws
     
-    # Deletes user from session dictionary
-    username = sessions.get(client_id)
-    del sessions[username][0]
-
-    # Check when the user disconects
-    disconnected_time = datetime.now()
-
-    # Función para verificar la reconexión del cliente
-    def check_reconnection():
-        while True:
-            # Esperar un tiempo corto antes de verificar la reconexión
-            time.sleep(3)
-            # Si el cliente se reconecta, sal de la función
-            if client_id in sessions:
-                break
-            # Verificar si ha pasado el tiempo máximo para la reconexión
-            if datetime.now() - disconnected_time > timedelta(seconds=MAX_RECONNECT_TIME):
-                # Get user token by email
-                old_user_token = database_helper.get_first_user_token(username)
-                # Force sign out from server database
-                if old_user_token:
-                    database_helper.delete_token(old_user_token)
-                else: print('Fatal error deleting token')    
-                break
-
-    # starts a thread to check reconnection 
-    threading.Thread(target=check_reconnection).start()
-
 # Server setting
 if __name__ == '__main__':
     # Creates the tables for the db
     #database_helper.create_tables()
-    #app.debug = True
-    #if "AZURE_POSTGRESQL_CONNECTIONSTRING" in os.environ:
-    #  conn = os.environ["AZURE_POSTGRESQL_CONNECTIONSTRING"]
-    #  values = dict(x.split("=") for x in conn.split(' '))
-    #  user = values['user']
-    #  host = values['host']
-    #  database = values['dbname']
-    #  password = values['password']
-    #  db_uri = f'postgresql+psycopg2://{user}:{password}@{host}/{database}'
-    #  app.config['SQLALCHEMY_DATABASE_URI'] = db_uri 
-    #  debug_flag = False
+    #if "RENDER_POSTGRESQL_CONNECTIONSTRING" in os.environ:
+    print(os.environ.get('DATABASE_URL'))
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://twidder_db_user:vtPvNum8SWLWTdtaIEZ3HFZa6yHGmLnt@dpg-cnrop0i1hbls73e0l7l0-a.oregon-postgres.render.com/twidder_db'#os.environ.get('DATABASE_URL')
+    print(app.config['SQLALCHEMY_DATABASE_URI'])
+    debug_flag = False
+    db.init_app(app)
     #else: # when running locally: use sqlite
-    #  #db_path = os.path.join(os.path.dirname(__file__), 'app.db')
-    #  #db_uri = f'sqlite:///{db_path}'
+    #  #print('hola')
+    #  db_path = os.path.join(os.path.dirname(__file__), 'database.db')
+    #  db_uri = f'sqlite:///{db_path}'
+    #  app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+    #  db.init_app(app)
     app.run(debug = False, host= "0.0.0.0")
-    sock.run(app)
-      
+    sock.run(app)    
