@@ -1,7 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
-from __init__ import db
 import string 
 import random
+import sqlalchemy.exc
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 
 DATABASE_PATH = 'database.db'
 #if app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://twidder_db_user:vtPvNum8SWLWTdtaIEZ3HFZa6yHGmLnt@dpg-cnrop0i1hbls73e0l7l0-a.oregon-postgres.render.com/twidder_db':
