@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Blueprint
 from email_validator import validate_email, EmailNotValidError
 from flask_sock import Sock
 from flask_mail import Mail, Message
@@ -9,15 +9,20 @@ from flask_sqlalchemy import SQLAlchemy
 import database_helper
 
 app = Flask(__name__, static_folder='static')
+main = Blueprint('main', __name__)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'twidder0.s9pport@gmail.com'
 #app.config['MAIL_PASSWORD'] = 'S0mo5_#ecQ59pport'
 app.config['MAIL_PASSWORD'] = 'btyd cehb flpz gowr' 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://twidder_db_user:vtPvNum8SWLWTdtaIEZ3HFZa6yHGmLnt@dpg-cnrop0i1hbls73e0l7l0-a.oregon-postgres.render.com/twidder_db'
+debug_flag = False
 sock = Sock(app)
 mail = Mail(app)
-db = SQLAlchemy()
+db = database_helper.db
+db.init_app(app)
+
 
 @app.route("/")
 def root():
