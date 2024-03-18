@@ -4,8 +4,6 @@ from flask_sock import Sock
 from flask_mail import Mail, Message
 import os
 import json
-#import db
-from flask_sqlalchemy import SQLAlchemy
 import database_helper
 
 app = Flask(__name__, static_folder='static')
@@ -791,16 +789,5 @@ if __name__ == '__main__':
     # Creates the tables for the db
     #database_helper.create_tables()
     #if "RENDER_POSTGRESQL_CONNECTIONSTRING" in os.environ:
-    print(os.environ.get('DATABASE_URL'))
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://twidder_db_user:vtPvNum8SWLWTdtaIEZ3HFZa6yHGmLnt@dpg-cnrop0i1hbls73e0l7l0-a.oregon-postgres.render.com/twidder_db'
-    print(app.config['SQLALCHEMY_DATABASE_URI'])
-    debug_flag = False
-    db.init_app(app)
-    #else: # when running locally: use sqlite
-    #  #print('hola')
-    #  db_path = os.path.join(os.path.dirname(__file__), 'database.db')
-    #  db_uri = f'sqlite:///{db_path}'
-    #  app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
-    #  db.init_app(app)
     app.run(debug = False, host= "0.0.0.0")
     sock.run(app)    
