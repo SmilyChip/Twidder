@@ -59,14 +59,14 @@
                 
                 <div id="post_message_own_wall">
                     <h3> Post a message!</h3>
-                    <textarea id="post_message" rows="4" cols="50" placeholder="Write a message..."></textarea>
+                    <textarea id="post_message" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" rows="4" cols="50" placeholder="Write a message..."></textarea>
                     <button onclick="post_message()">Post</button>
                     <div id="post_home_message"></div>
                 </div>
 
                 <div id="message_wall">
                     <h3>Your message wall</h3>
-                    <div id="message_wall_ms"></div>
+                    <div id="message_wall_ms" draggable="true"></div>
                     <button class="reload_button" onclick="reload_wall()">Reload Wall</button>
                 </div>   
             </div>
