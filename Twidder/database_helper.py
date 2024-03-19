@@ -9,7 +9,7 @@ import os
 
 DATABASE_PATH = 'database.db'
 
-is_local = os.environ.get('RUNNING_LOCALLY')
+is_local = False
 
 if not is_local:
     db = SQLAlchemy()
