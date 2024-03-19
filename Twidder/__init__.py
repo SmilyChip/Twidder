@@ -18,6 +18,7 @@ is_local = os.environ.get('RUNNING_LOCALLY')
 print(is_local)
 # Configuration to run with PostgreSQL
 if not is_local:
+    print('hola')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
     debug_flag = False
     db = database_helper.db
