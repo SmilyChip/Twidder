@@ -9,7 +9,7 @@ import os
 
 DATABASE_PATH = 'database.db'
 
-if not os.environment.get('RUNNING_LOCALLY'):
+if not os.environ.get('RUNNING_LOCALLY'):
     db = SQLAlchemy()
     postgreSQL = True
     SQLite = False
