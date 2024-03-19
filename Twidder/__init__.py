@@ -13,12 +13,16 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_SUPPORT_EMAIL') 
 app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_SUPPORT_PASSWORD')  
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-debug_flag = False
+
+# Configuration to run with PostgreSQL
+if os.environ.get('RUNNING_LOCALLY'):
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+    debug_flag = False
+    db = database_helper.db
+    db.init_app(app)
+
 sock = Sock(app)
 mail = Mail(app)
-db = database_helper.db
-db.init_app(app)
 
 # App url
 app_url = os.environ.get('TWIDDER_URL')
