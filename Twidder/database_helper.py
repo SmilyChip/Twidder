@@ -442,7 +442,7 @@ def get_user_messages(email):
             cursor = conn.cursor()
 
             # Get the user data by email
-            cursor.execute(sqlalchemy.text("SELECT sender_email, message FROM messages WHERE receiver_email = ?"), (email,))
+            cursor.execute(text("SELECT sender_email, message FROM messages WHERE receiver_email = ?"), (email,))
             user_data = cursor.fetchall()
 
             # Close the database connection
