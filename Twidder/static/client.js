@@ -657,7 +657,3 @@ function get_messages_browse() {
     xhr_user_mess.setRequestHeader("Authorization", token);
     xhr_user_mess.send();
 }
-    };
-    xhr_user_mess.setRequestHeader("Authorization", token);
-    xhr_user_mess.send();
-}
