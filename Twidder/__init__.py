@@ -20,6 +20,9 @@ mail = Mail(app)
 db = database_helper.db
 db.init_app(app)
 
+#app url
+app_url = os.environ.get('TWIDDER_URL')
+
 @app.route("/")
 def root():
     """
@@ -658,7 +661,7 @@ def recover_password():
     try:
       server_email = 'twidder0.s9pport@gmail.com'
       msg = Message('Recover your Twidder password', sender=server_email, recipients=[username])
-      url = f'{os.environ.get('TWIDDER_URL')}/change_password_by_email?user={token}'
+      url = f'{app_url}/change_password_by_email?user={token}'
       body = f'This email is used to recover your Twidder password. Please click <a href="{url}">here</a> to reset your password.'
       msg.html = body
       mail.send(msg)
