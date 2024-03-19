@@ -119,8 +119,8 @@ function display_profile_view() {
     // It also reloads the wall only when the profile page is displayed 
     reload_wall();
     // Add event controller to dragover HTML elements
-    document.getElementById("post_message").addEventListener("drop", handleDrop);
-    document.getElementById("post_message").addEventListener("dragover", handleDragOver);
+    document.getElementById("post_message_own_wall").addEventListener("drop", handleDrop);
+    document.getElementById("post_message_own_wall").addEventListener("dragover", handleDragOver);
     }
 
 // Function to shut down the profile page
