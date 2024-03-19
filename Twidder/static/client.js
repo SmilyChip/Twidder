@@ -56,6 +56,22 @@ function close_websocket_connection() {
     }
 }
 
+//------------------------Drag and drop funcitons----------------------
+
+// Función para manejar el evento de soltar
+function handleDrop(event) {
+    event.preventDefault();
+    // Obtener la información del archivo arrastrado
+    var file = event.dataTransfer.files[0];
+    // Hacer algo con el archivo, como subirlo al servidor
+    console.log("Archivo soltado:", file.name);
+}
+
+// Función para prevenir el comportamiento predeterminado de arrastrar y soltar
+function handleDragOver(event) {
+    event.preventDefault();
+}
+
 //------------------------Logic and HTML handling----------------------
 
 // Function to display the welcome page
@@ -102,6 +118,9 @@ function display_profile_view() {
     show_user_data();
     // It also reloads the wall only when the profile page is displayed 
     reload_wall();
+    // Add event controller to dragover HTML elements
+    document.getElementById("post_message").addEventListener("drop", handleDrop);
+    document.getElementById("post_message").addEventListener("dragover", handleDragOver);
     }
 
 // Function to shut down the profile page
@@ -596,19 +615,23 @@ function browse_user() {
                 `;
                 browse_user_post.innerHTML = `
                     <h3> Post a message!</h3>
-                    <textarea id="post_message_other_user" rows="4" cols="50" placeholder="Write a message..."></textarea>
+                    <textarea id="post_message_other_user" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" rows="4" cols="50" placeholder="Write a message..."></textarea>
                     <button onclick="post_message()">Post</button>        
                 `;
                 browse_user_wall.innerHTML =`
                     <h3>${user.firstname}'s message wall</h3> 
-                    <div id="browse_user_wall_message"></div>
+                    <div id="browse_user_wall_message" draggable="true"></div>
                     <button class="reload_button" onclick="reload_wall_browse()">Reload Wall</button>
                 `;
                 browse_user_info.style.display = "block";
                 browse_user_post.style.display = "block";
                 browse_user_wall.style.display = "block";
-
+                
                 get_messages_browse();
+                
+                // Add event controller to dragover HTML elements
+                document.getElementById("post_message_other_user").addEventListener("drop", handleDrop);
+                document.getElementById("post_message_other_user").addEventListener("dragover", handleDragOver);
             } else {
                 let response = JSON.parse(xhr_user_info.responseText);
                 if (response.message === 'Email missing') {
