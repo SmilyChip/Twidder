@@ -58,16 +58,17 @@ function close_websocket_connection() {
 
 //------------------------Drag and drop funcitons----------------------
 
-// Función para manejar el evento de soltar
+// Function to hanble drop
 function handleDrop(event) {
     event.preventDefault();
-    // Obtener la información del archivo arrastrado
+    // Get informatio by dragging
     var file = event.dataTransfer.getData('text');
-    // Hacer algo con el archivo, como subirlo al servidor
-    event.target.appendChild(document.getElementById(file));
+    // Isert value in text box
+    message_text = document.getElementById(file).innerHTML;
+    document.getElementById(file).innerHTML = message_text + file;
 }
 
-// Función para prevenir el comportamiento predeterminado de arrastrar y soltar
+// Function to prevent default event and hadle dragover
 function handleDragOver(event) {
     event.preventDefault();
 }
