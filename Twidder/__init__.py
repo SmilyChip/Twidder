@@ -14,8 +14,9 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_SUPPORT_EMAIL') 
 app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_SUPPORT_PASSWORD')  
 
+is_local = os.environ.get('RUNNING_LOCALLY')
 # Configuration to run with PostgreSQL
-if not os.environ.get('RUNNING_LOCALLY'):
+if not is_local:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
     debug_flag = False
     db = database_helper.db
