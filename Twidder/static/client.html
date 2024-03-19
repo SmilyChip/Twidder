@@ -57,9 +57,9 @@
                 <div id="user_info"></div>
                 <div id="user_info_message"></div>
                 
-                <div id="post_message_own_wall" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+                <div id="post_message_own_wall">
                     <h3> Post a message!</h3>
-                    <textarea id="post_message" rows="4" cols="50" placeholder="Write a message..."></textarea>
+                    <textarea id="post_message" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" rows="4" cols="50" placeholder="Write a message..."></textarea>
                     <button onclick="post_message()">Post</button>
                     <div id="post_home_message"></div>
                 </div>
