@@ -14,7 +14,7 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_SUPPORT_EMAIL') 
 app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_SUPPORT_PASSWORD')  
 
-is_local = os.environ.get('RUNNING_LOCALLY')
+is_local = bool(os.environ.get('RUNNING_LOCALLY'))
 print(is_local)
 # Configuration to run with PostgreSQL
 if not is_local:
