@@ -59,13 +59,13 @@ function close_websocket_connection() {
 //------------------------Drag and drop funcitons----------------------
 
 // Function to hanble drop
-function handleDrop(event) {
+function handleDrop(event, elementID) {
     event.preventDefault();
     // Get informatio by dragging
     var file = event.dataTransfer.getData('text');
     // Isert value in text box
-    message_text = document.getElementById(file).value;
-    document.getElementById(file).value = message_text + file;
+    message_text = document.getElementById(elementID).value;
+    document.getElementById(elementID).value = message_text + file;
 }
 
 // Function to prevent default event and hadle dragover
@@ -616,7 +616,7 @@ function browse_user() {
                 `;
                 browse_user_post.innerHTML = `
                     <h3> Post a message!</h3>
-                    <textarea id="post_message_other_user" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" rows="4" cols="50" placeholder="Write a message..."></textarea>
+                    <textarea id="post_message_other_user" ondrop="handleDrop(event)" ondragover="handleDragOver(event, 'post_message_other_user')" rows="4" cols="50" placeholder="Write a message..."></textarea>
                     <button onclick="post_message()">Post</button>        
                 `;
                 browse_user_wall.innerHTML =`
