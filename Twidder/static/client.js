@@ -18,7 +18,7 @@ function establish_websocket_connection() {
     }
 
     // Creates a new websocket instance if there is no conection established
-    socket = new WebSocket("ws://twidder.onrender.com/start_session");
+    socket = new WebSocket("wss://twidder.onrender.com/start_session");
 
     socket.onopen = function(event) {
         console.log('Connection with server established.');
@@ -192,7 +192,7 @@ function recover_account(form) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             let response = JSON.parse(xhr.responseText);
             if (xhr.status === 200) {
-                show_message("Recovery link sent to your email.", 'forgot_password_message');
+                show_message("Recovery link sent to your email, please click cancel to go back to main page.", 'forgot_password_message');
                 form.email.value = "";
             } else {if (response.message === 'Missing data or invalid request') {
                 show_message('Missing data in the form, please try again.', 'forgot_password_message');}
@@ -653,6 +653,10 @@ function get_messages_browse() {
                 show_message(response.message,'browse_message');}
             }
         }
+    };
+    xhr_user_mess.setRequestHeader("Authorization", token);
+    xhr_user_mess.send();
+}
     };
     xhr_user_mess.setRequestHeader("Authorization", token);
     xhr_user_mess.send();
