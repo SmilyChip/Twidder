@@ -5,6 +5,7 @@ import sqlalchemy.exc
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 import sqlite3
+import os 
 
 DATABASE_PATH = 'database.db'
 
