@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, Blueprint
+from flask import Flask, jsonify, request
 from email_validator import validate_email, EmailNotValidError
 from flask_sock import Sock
 from flask_mail import Mail, Message
@@ -6,8 +6,8 @@ import os
 import json
 import database_helper
 
+# Flask app configurations
 app = Flask(__name__, static_folder='static')
-main = Blueprint('main', __name__)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -20,7 +20,7 @@ mail = Mail(app)
 db = database_helper.db
 db.init_app(app)
 
-#app url
+# App url
 app_url = os.environ.get('TWIDDER_URL')
 
 @app.route("/")
@@ -97,7 +97,6 @@ def sign_in():
         else:
             return jsonify({'message': 'Wrong credentials (username/password).'}), 401
     except Exception as e:
-        print(e)
         return jsonify({'message': 'Internal server error.', 'error': str(e)}), 500
 
 
@@ -785,10 +784,8 @@ def start_session(ws):
                 ws.send(json.dumps({'action': 'session_activated'}))
 
     
-# Server setting
+# Server running setting
+# use host 127.0.0.1:5000 when running locally
 if __name__ == '__main__':
-    # Creates the tables for the db
-    #database_helper.create_tables()
-    #if "RENDER_POSTGRESQL_CONNECTIONSTRING" in os.environ:
     app.run(debug = False, host= "0.0.0.0")
     sock.run(app)    
