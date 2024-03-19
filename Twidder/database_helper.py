@@ -4,50 +4,52 @@ import random
 import sqlalchemy.exc
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
-
-db = SQLAlchemy()
+import sqlite3
 
 DATABASE_PATH = 'database.db'
-#if app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://twidder_db_user:vtPvNum8SWLWTdtaIEZ3HFZa6yHGmLnt@dpg-cnrop0i1hbls73e0l7l0-a.oregon-postgres.render.com/twidder_db':
-postgreSQL = True
-SQLite = False
-class User(db.Model):
-    __tablename__ = 'users'
 
-    email = db.Column(db.String(120), primary_key=True)
-    password = db.Column(db.String(100), nullable=False)
-    firstname = db.Column(db.String(50), nullable=False)
-    familyname = db.Column(db.String(50), nullable=False)
-    gender = db.Column(db.String(10), nullable=False)
-    city = db.Column(db.String(50), nullable=False)
-    country = db.Column(db.String(50), nullable=False)
-
-class Token(db.Model):
-    __tablename__ = 'tokens'
-
-    token = db.Column(db.String(100), primary_key=True)
-    email = db.Column(db.String(120), db.ForeignKey('users.email'))
+if not os.environment.get('RUNNING_LOCALLY'):
+    db = SQLAlchemy()
+    postgreSQL = True
+    SQLite = False
+    class User(db.Model):
+        __tablename__ = 'users'
     
-class TokenRecover(db.Model):
-    __tablename__ = 'tokens_recover'
+        email = db.Column(db.String(120), primary_key=True)
+        password = db.Column(db.String(100), nullable=False)
+        firstname = db.Column(db.String(50), nullable=False)
+        familyname = db.Column(db.String(50), nullable=False)
+        gender = db.Column(db.String(10), nullable=False)
+        city = db.Column(db.String(50), nullable=False)
+        country = db.Column(db.String(50), nullable=False)
+    
+    class Token(db.Model):
+        __tablename__ = 'tokens'
+    
+        token = db.Column(db.String(100), primary_key=True)
+        email = db.Column(db.String(120), db.ForeignKey('users.email'))
+        
+    class TokenRecover(db.Model):
+        __tablename__ = 'tokens_recover'
+    
+        token = db.Column(db.String(100), primary_key=True)
+        email = db.Column(db.String(120), db.ForeignKey('users.email'))
+    
+    class Message(db.Model):
+        __tablename__ = 'messages'
+    
+        message_id = db.Column(db.Integer, primary_key=True)
+        sender_email = db.Column(db.String(120), db.ForeignKey('users.email'))
+        receiver_email = db.Column(db.String(120), db.ForeignKey('users.email'))
+        message = db.Column(db.Text, nullable=False)
+    
+        sender = db.relationship('User', foreign_keys=[sender_email])
+        receiver = db.relationship('User', foreign_keys=[receiver_email])
 
-    token = db.Column(db.String(100), primary_key=True)
-    email = db.Column(db.String(120), db.ForeignKey('users.email'))
+else: 
+    postgreSQL = False
+    SQLite = True
 
-class Message(db.Model):
-    __tablename__ = 'messages'
-
-    message_id = db.Column(db.Integer, primary_key=True)
-    sender_email = db.Column(db.String(120), db.ForeignKey('users.email'))
-    receiver_email = db.Column(db.String(120), db.ForeignKey('users.email'))
-    message = db.Column(db.Text, nullable=False)
-
-    sender = db.relationship('User', foreign_keys=[sender_email])
-    receiver = db.relationship('User', foreign_keys=[receiver_email])
-
-#else: 
-#    postgreSQL = False
-#    SQLite = True
 
 def create_tables():
     """
@@ -59,7 +61,7 @@ def create_tables():
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Read the schema file and execute the SQL commands
@@ -72,7 +74,7 @@ def create_tables():
             conn.close()
 
             return True
-        except db.Error:
+        except sqlite3.Error:
             return False
     else: 
         try:   
@@ -94,7 +96,7 @@ def authenticate_user(username, password):
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Check if the username and password match a user in the database
@@ -105,14 +107,14 @@ def authenticate_user(username, password):
             conn.close()
 
             if user_data:
-                # Authentication successful, generate and return an access token
+                # Authentication successful
                 return True
             else:
                 # Authentication failed
                 return False
             
-        except db.Error as e:
-            return e
+        except sqlite3.Error:
+            return False
     else: 
         try: 
             user = User.query.filter_by(email=username, password=password).first()
@@ -133,7 +135,7 @@ def find_user(username):
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Check if the username and password match a user in the database
@@ -150,15 +152,17 @@ def find_user(username):
                 # Authentication failed
                 return False
             
-        except db.Error:
+        except sqlite3.Error:
             return False        
     else: 
         try:
             user = User.query.filter_by(email=username).first()
             return user is not None
-        except db.Error:
-            return False 
-            
+        except sqlalchemy.exc.SQLAlchemyError as e:
+        # Manejar la excepción aquí, por ejemplo, imprimir el error
+            print("Error al buscar usuario:", e)
+            return None
+    
 def generate_token(username):
     """Generates a random access token for the given username.
 
@@ -178,7 +182,7 @@ def generate_token(username):
     if SQLite:
         try:            
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Update the access token for the user in the database
@@ -187,7 +191,7 @@ def generate_token(username):
             conn.close()
             return token
         
-        except db.Error as e:
+        except sqlite3.Error:
             return e
     else:
         try:
@@ -214,7 +218,7 @@ def token_to_email(token):
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Retrieve the email associated with the access token
@@ -229,7 +233,7 @@ def token_to_email(token):
             else:
                 return None
             
-        except db.Error:
+        except sqlite3.Error:
             return None
     else:
         try:    
@@ -263,7 +267,7 @@ def register_user(email, password, firstname, familyname, gender, city, country)
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Insert the new user into the database
@@ -276,7 +280,7 @@ def register_user(email, password, firstname, familyname, gender, city, country)
 
             # Registration successful
             return True
-        except db.Error:
+        except sqlite3.Error:
             return False
     else: 
         try:
@@ -302,7 +306,7 @@ def delete_token(token):
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Delete the token from the database
@@ -311,7 +315,7 @@ def delete_token(token):
             conn.close()
             return True
         
-        except db.Error:
+        except sqlite3.Error:
             return False
     else: 
         try: 
@@ -342,7 +346,7 @@ def change_user_password(email, new_password):
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Update the user's password
@@ -351,7 +355,7 @@ def change_user_password(email, new_password):
             conn.close()
             return True
         
-        except db.Error:
+        except sqlite3.Error:
             return False
     else: 
         try:
@@ -381,7 +385,7 @@ def get_user_data(email):
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Get the user data by email
@@ -403,7 +407,7 @@ def get_user_data(email):
             else:
                 # User not found
                 return None
-        except db.Error:
+        except sqlite3.Error:
             return None    
     else: 
         try: 
@@ -438,11 +442,11 @@ def get_user_messages(email):
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Get the user data by email
-            cursor.execute(text("SELECT sender_email, message FROM messages WHERE receiver_email = ?"), (email,))
+            cursor.execute("SELECT sender_email, message FROM messages WHERE receiver_email = ?", (email,))
             user_data = cursor.fetchall()
 
             # Close the database connection
@@ -460,7 +464,7 @@ def get_user_messages(email):
             else:
                 # User has no messages
                 return []
-        except db.Error:
+        except sqlite3.Error:
             return None    
     else: 
         try:
@@ -503,7 +507,7 @@ def post_message(sender_email, receiver_email, message):
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Insert the message into the messages table
@@ -516,7 +520,7 @@ def post_message(sender_email, receiver_email, message):
 
             return True
         
-        except db.Error:
+        except sqlite3.Error:
             return False
     else: 
         try:
@@ -547,7 +551,7 @@ def get_first_user_token(username):
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Insert the message into the messages table
@@ -558,7 +562,7 @@ def get_first_user_token(username):
             conn.close()
             return user_data
         
-        except db.Error:
+        except sqlite3.Error:
             return False    
     else: 
         try:
@@ -593,7 +597,7 @@ def token_pass_recover(email):
     if SQLite:
         try:                       
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Update the access token for the user in the database
@@ -602,7 +606,7 @@ def token_pass_recover(email):
             conn.close()
             return token
 
-        except db.Error as e:
+        except sqlite3.Error as e:
             return e
     else: 
         try: 
@@ -632,7 +636,7 @@ def delete_token_recover(token):
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Delete the token from the database
@@ -641,7 +645,7 @@ def delete_token_recover(token):
             conn.close()
             return True
         
-        except db.Error:
+        except sqlite3.Error:
             return False
     else:
         try:
@@ -676,7 +680,7 @@ def token_to_email_recover(token):
     if SQLite:
         try:
             # Connect to the database
-            conn = db.connect(DATABASE_PATH)
+            conn = sqlite3.connect(DATABASE_PATH)
             cursor = conn.cursor()
 
             # Retrieve the email associated with the access token
@@ -691,7 +695,7 @@ def token_to_email_recover(token):
             else:
                 return None
             
-        except db.Error:
+        except sqlite3.Error:
             return None
     else: 
         try:
