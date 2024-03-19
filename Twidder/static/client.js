@@ -284,7 +284,7 @@ function save_contact(form){
                 else if (response.message ===   'Error creating the user') {
                 show_message('Server error creating user, please try again.', 'signup_message');}    
                 else {
-                show_message(response.message,'signup_message');}
+                show_message(response.error,'signup_message');}
                 }
         }
     };
