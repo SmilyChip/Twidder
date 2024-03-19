@@ -62,9 +62,9 @@ function close_websocket_connection() {
 function handleDrop(event) {
     event.preventDefault();
     // Obtener la información del archivo arrastrado
-    var file = event.dataTransfer.files[0];
+    var file = event.dataTransfer.getData('text');
     // Hacer algo con el archivo, como subirlo al servidor
-    console.log("Archivo soltado:", file.name);
+    event.target.appendChild(document.getElementById(file));
 }
 
 // Función para prevenir el comportamiento predeterminado de arrastrar y soltar
