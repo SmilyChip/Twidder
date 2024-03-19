@@ -10,6 +10,7 @@ import os
 DATABASE_PATH = 'database.db'
 
 is_local = os.environ.get('RUNNING_LOCALLY')
+print(is_local)
 if not is_local:
     db = SQLAlchemy()
     postgreSQL = True
