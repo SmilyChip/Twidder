@@ -465,7 +465,7 @@ def get_user_messages(email):
     else: 
         try:
             # Execute the query using SQLAlchemy
-            messages_data = db.session.execute("SELECT sender_email, message FROM messages WHERE receiver_email = :email", {"email": email})
+            messages_data = db.session.execute(text("SELECT sender_email, message FROM messages WHERE receiver_email = :email"), {"email": email})
 
             # Fetch all the results
             user_data = messages_data.fetchall()
