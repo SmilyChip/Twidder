@@ -64,8 +64,7 @@ function handleDrop(event, elementID) {
     // Get informatio by dragging
     var file = event.dataTransfer.getData('text');
     // Isert value in text box
-    message_text = document.getElementById(elementID).value;
-    document.getElementById(elementID).value = file;
+    document.getElementById(elementID).value += file;
 }
 
 // Function to prevent default event and hadle dragover
