@@ -120,7 +120,8 @@ function display_profile_view() {
     // It also reloads the wall only when the profile page is displayed 
     reload_wall();
     // Add event controller to dragover HTML elements
-    document.getElementById("post_message").addEventListener("drop", handleDrop);
+    document.getElementById("post_message").addEventListener("drop", function(event) {
+        handleDrop(event, 'post_message');});
     document.getElementById("post_message").addEventListener("dragover", handleDragOver);
     }
 
