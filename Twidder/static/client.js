@@ -616,7 +616,7 @@ function browse_user() {
                 `;
                 browse_user_post.innerHTML = `
                     <h3> Post a message!</h3>
-                    <textarea id="post_message_other_user" ondrop="handleDrop(event)" ondragover="handleDragOver(event, 'post_message_other_user')" rows="4" cols="50" placeholder="Write a message..."></textarea>
+                    <textarea id="post_message_other_user" ondrop="handleDrop(event, 'post_message_other_user')" ondragover="handleDragOver(event)" rows="4" cols="50" placeholder="Write a message..."></textarea>
                     <button onclick="post_message()">Post</button>        
                 `;
                 browse_user_wall.innerHTML =`
