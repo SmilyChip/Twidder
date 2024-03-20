@@ -121,7 +121,7 @@ function display_profile_view() {
     reload_wall();
     // Add event controller to dragover HTML elements
     document.getElementById("post_message").addEventListener("drop", function(event) {
-        handleDrop(event, 'post_message');})
+        handleDrop(event, 'post_message')});
     document.getElementById("post_message").addEventListener("dragover", handleDragOver);
     }
 
