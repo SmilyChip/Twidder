@@ -214,20 +214,15 @@ function recover_account(form) {
             if (xhr.status === 200) {
                 show_message("Recovery link sent to your email, please click cancel to go back to main page.", 'forgot_password_message');
                 form.email.value = "";
-            } else {if (response.message === 'Missing data or invalid request') {
-                show_message('Missing data in the form, please try again.', 'forgot_password_message');}
-                else if (response.message ===   'User not found.') {
+            } else {if (xhr.status === 400) {
+                show_message('Missing data in the form or invalid email, please try again.', 'forgot_password_message');}
+                else if (xhr.status === 404) {
                 show_message('User not found with the provided email, please try again.', 'forgot_password_message');}
-                else if (response.message ===   'Invalid email address.') {
-                show_message('Provided email is invalid, please try again.', 'forgot_password_message');} 
-                else if (response.message === 'Internal server error creating token.') {
-                show_message('Server error creating credentials to change password, please try again.', 'forgot_password_message');}   
-                else if (response.message ===   'Internal server error sending email.') {
-                show_message('Server error sending email, please try again.', 'forgot_password_message');}
-                else {
-                show_message(response.message+', please try again','forgot_password_message');}
-                }
-        }
+                else if (xhr.status === 405) {
+                show_message('Invalid request method, please try again.', 'forgot_password_message');} 
+                else if (xhr.status === 500) {
+                show_message('Server error creating credentials to change password or error sending email, please try again.', 'forgot_password_message');}   
+                }}
     };
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.send(JSON.stringify(data));
@@ -253,10 +248,12 @@ function show_user_data() {
                     <p><b>Country:</b> ${user.data.country}</p>
                 `;
             } else {
-                if (user.message === 'Error getting user data') {
+                if (xhr.status === 500) {
                 show_message('Server error getting data, please try again.', 'user_info_message');}    
-                else {
-                show_message(user.message,'user_info_message');}
+                else if (xhr.status === 401){
+                show_message('Credentials missing or incorrect credentials, please try again or reload page','user_info_message');}
+                else if (xhr.status === 405){
+                show_message('Invalid request method, please try again.','user_info_message');}
             }
         }
     };
@@ -295,16 +292,14 @@ function save_contact(form){
                 show_message("User registered succesfully", 'signup_message');
                 verify_login(form);
             } else {
-                if (response.message === 'User already exists') {
+                if (xhr.status === 409) {
                 show_message('Email already registered.', 'signup_message');}
-                else if (response.message ===   'Invalid data format') {
-                show_message('Data has incorrect format, server error.', 'signup_message');}
-                else if (response.message ===   'Invalid email address') {
-                show_message('Provided email is invalid, please try again.', 'signup_message');}    
-                else if (response.message ===   'Error creating the user') {
+                else if (xhr.status === 400) {
+                show_message('Data has incorrect format (email/password) or is missing, server error.', 'signup_message');}
+                else if (xhr.status === 500) {
                 show_message('Server error creating user, please try again.', 'signup_message');}    
-                else {
-                show_message(response.error,'signup_message');}
+                else if (xhr.status === 405){
+                show_message('Invalid request method, please try again.', 'signup_message');}
                 }
         }
     };
@@ -332,18 +327,16 @@ function verificate_user(form) {
                 display_profile_view();
                 }
             else {
-                if (response.message === 'Missing data or invalid request') {
-                    show_message('Missing data in the form, please try again.', 'login_message');}
-                    else if (response.message ===   'User not found.') {
+                if (xhr.status === 400) {
+                    show_message('Missing or incorrect data provided, please try again.', 'login_message');}
+                    else if (xhr.status === 404) {
                     show_message('User not found with the provided email, please try again.', 'login_message');}
-                    else if (response.message ===   'Invalid email address.') {
-                    show_message('Provided email is invalid, please try again.', 'login_message');}    
-                    else if (response.message ===   'Internal server error.') {
+                    else if (xhr.status === 500) {
                     show_message('Server error logging the user, please try again.', 'login_message');}
-                    else if (response.message ===   'Wrong credentials (username/password).') {
+                    else if (xhr.status === 401) {
                     show_message('Email or password error, please try again.', 'login_message');}    
-                    else {
-                    show_message(response.message,'signup_message');}
+                    else if (xhr.status === 405){
+                    show_message('Invalid request method, please try again.', 'login_message');}
                     }
             }
     };
@@ -377,14 +370,14 @@ function change_password(form) {
             }
              else { 
                 let response= JSON.parse(xhr.responseText);
-                if (response.message === 'Incorrect new password format or length') {
-                show_message('New password is not valid, incorrect format or length, please try again.', 'passchange_message');}
-                else if (response.message ===   'Incorrect password.') {
-                show_message('Incorrect actual password provided, please try again.', 'passchange_message');}
-                else if (response.message ===   'Error changing the password') {
+                if (xhr.status === 400) {
+                show_message('New password is not valid or incorrect actual password provided, please try again.', 'passchange_message');}
+                else if (xhr.status === 401) {
+                show_message('Incorrect credentials, please try again or reload page.', 'passchange_message');}
+                else if (xhr.status === 500) {
                 show_message('Server error changing password, please try again.', 'passchange_message');}    
-                else {
-                show_message(response.message,'signup_message');}
+                else if (xhr.status === 405){
+                show_message('Invalid request method, please try again.', 'passchange_message');}       
             }
         };}
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -408,9 +401,14 @@ function sign_out() {
                 display_welcome_view();
                 close_websocket_connection();
             } else {
-                if (response.message === 'Error deleating the token') {
+                if (xhr.status === 500) {
                 show_message('Server error logging out, please try again.', 'logout_message');}
-                else {show_message(response.message,'signup_message');}
+                else if (xhr.status === 400){
+                show_message('Incorrect credentials provided, please try again or reload page.','logout_message');}
+                else if (xhr.status === 401){
+                    show_message('Credentials missing, please try again or reload page.','logout_message');}
+                else if (xhr.status === 405){
+                show_message('Invalid request method, please try again.', 'logout_message');}
             }
         }
     };
@@ -447,10 +445,12 @@ function post_message() {
                     post_message_request(message, to_email);
                 } 
                 else {
-                    if (response.message === 'Error getting user data') {
-                    show_message('Server error getting data, please try again.', 'post_home_message');}    
-                    else {
-                    show_message(response.message,'post_home_message');}
+                    if (xhr.status === 500) {
+                    show_message('Server error getting data, please try again.', 'user_info_message');}    
+                    else if (xhr.status === 401){
+                    show_message('Credentials missing or incorrect credentials, please try again or reload page','user_info_message');}
+                    else if (xhr.status === 405){
+                    show_message('Invalid request method, please try again.','user_info_message');}
                 }
             }
         };
@@ -499,23 +499,23 @@ function post_message_request(message, to_email) {
             } else {
                 let response = JSON.parse(xhr.responseText);
                 if (home_content.style.display === 'block') {
-                    if (response.message === 'Missing required data') {
+                    if (xhr.status === 400) {
                     show_message('Missing data, verify email/message and try again.', 'post_home_message');}
-                    else if (response.message === 'Receiver email not found') {
+                    else if (xhr.status === 404) {
                     show_message('Server error user not found, please try again.', 'post_home_message');}
-                    else if (response.message === 'Error posting message') {
+                    else if (xhr.status === 500) {
                     show_message('Server error posting message, please try again.', 'post_home_message');}    
-                    else {
-                    show_message(response.message,'post_home_message');}
+                    else if (xhr.status === 405){
+                    show_message('Invalid request method, please try again.','post_home_message');}
                 } else {
-                    if (response.message === 'Missing required data') {
+                    if (xhr.status === 400) {
                     show_message('Missing data, verify email/message and try again.', 'browse_message');}
-                    else if (response.message === 'Receiver email not found') {
+                    else if (xhr.status === 404) {
                     show_message('Server error user not found, please try again.', 'browse_message');}
-                    else if (response.message === 'Error posting message') {
+                    else if (xhr.status === 500) {
                     show_message('Server error posting message, please try again.', 'browse_message');}    
-                    else {
-                    show_message(response.message,'browse_message');}
+                    else if (xhr.status === 405){
+                    show_message('Invalid request method, please try again.','browse_message');}
             }
             }
         }
@@ -543,10 +543,12 @@ function reload_wall() {
                         message_wall.appendChild(li);
                 })};
             } else {
-                if (response.message === 'Error getting user messages') {
-                    show_message('Server error getting messages, please try again.', 'post_home_message');}    
-                    else {
-                    show_message(response.message,'post_home_message');}
+                if (xhr.status === 500) {
+                show_message('Server error getting messages, please try again.', 'post_home_message');}    
+                else if (xhr.status === 401){
+                show_message('Incorrect credentials provided, please try again or reload page.','post_home_message');}
+                else if (xhr.status === 405){
+                show_message('Invalid request method, please try again.','post_home_message');}
             }
         }
     };
@@ -573,14 +575,16 @@ function reload_wall_browse() {
                     browse_user_wall.appendChild(li);
                 });
             } else {
-                if (response.message === 'Email missing') {
+                if (xhr.status === 400) {
                 show_message('Missing email, please try again.', 'browse_user_wall_message');}
-                else if (response.message === 'Email does not exist') {
+                else if (xhr.status === 404) {
                 show_message('Email provided not found, please try again.', 'browse_user_wall_message');}
-                else if (response.message === 'Error retrieving data') {
+                else if (xhr.status === 401){
+                show_message('Incorrect credentials provided, please try again or reload page.','browse_user_wall_message');}
+                else if (xhr.status === 405){
+                show_message('Invalid request method, please try again.','browse_user_wall_message');}
+                else if (xhr.status === 500) {
                 show_message('Server error getting messages, please try again.', 'browse_user_wall_message');}    
-                else {
-                show_message(response.message,'browse_user_wall_message');}
             }
         }
     };
@@ -636,14 +640,16 @@ function browse_user() {
                 document.getElementById("post_message_other_user").addEventListener("dragover", handleDragOver);
             } else {
                 let response = JSON.parse(xhr_user_info.responseText);
-                if (response.message === 'Email missing') {
+                if (xhr_user_info.status === 400) {
                 show_message('Missing email, please try again.', 'browse_message');}
-                else if (response.message === 'User with the provided email does not exist') {
+                else if (xhr_user_info.status === 404) {
                 show_message('Email provided not found, please try again.', 'browse_message');}
-                else if (response.message === 'Error retrieving data') {
+                else if (xhr_user_info.status === 500) {
                 show_message('Server error getting information.', 'browse_message');}    
-                else {
-                show_message(response.message,'browse_message');}
+                else if (xhr_user_info.status === 405){
+                show_message('Invalid request method, please try again.','browse_message');}
+                else if (xhr_user_info.status === 401){
+                show_message('Incorrect credentials provided, please try again or reload page.','browse_message');}
             }
         }
     };
@@ -668,17 +674,20 @@ function get_messages_browse() {
                     });    
             } else {
                 let response = JSON.parse(xhr_user_info.responseText);
-                if (response.message === 'Email missing') {
+                if (xhr_user_mess.status === 400) {
                 show_message('Missing email, please try again.', 'browse_message');}
-                else if (response.message === 'Email does not exist') {
+                else if (xhr_user_mess.status === 404) {
                 show_message('Email provided not found, please try again.', 'browse_message');}
-                else if (response.message === 'Error retrieving data') {
+                else if (xhr_user_mess.status === 500) {
                 show_message('Server error getting information.', 'browse_message');}    
-                else {
-                show_message(response.message,'browse_message');}
+                else if (xhr_user_mess.status === 405){
+                show_message('Invalid request method, please try again.','browse_message');}
+                else if (xhr_user_mess.status === 401)
+                show_message('Incorrect credentials provided, please try again or reload page.', 'browse_message')
             }
         }
     };
     xhr_user_mess.setRequestHeader("Authorization", token);
     xhr_user_mess.send();
 }
+
